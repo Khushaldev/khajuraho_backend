@@ -5,14 +5,14 @@ import (
 	"khajuraho/backend/internal/config"
 	"runtime/debug"
 
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 )
 
 // ErrorHandler is a middleware that handles errors in the application. It
 // prints the stack trace when in development mode and returns a JSON response
 // with the error message. When in production mode, it simply returns a JSON
 // response with a generic error message.
-func ErrorHandler(c fiber.Ctx, err error) error {
+func ErrorHandler(c *fiber.Ctx, err error) error {
 	env := config.AppConfig.Env
 
 	if env == "development" {

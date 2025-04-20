@@ -3,7 +3,7 @@ package router
 import (
 	handler "khajuraho/backend/internal/handler/auth"
 
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 )
 
 func CreateRoutes(app *fiber.App) {

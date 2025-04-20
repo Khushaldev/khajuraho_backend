@@ -8,7 +8,7 @@ import (
 	"khajuraho/backend/internal/config"
 	"khajuraho/backend/pkg/utils"
 
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -27,7 +27,7 @@ func isValidJWT(tokenStr string) bool {
 }
 
 func JWTMiddleware() fiber.Handler {
-	return func(c fiber.Ctx) error {
+	return func(c *fiber.Ctx) error {
 		authHeader := c.Get("Authorization")
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 
@@ -50,7 +50,7 @@ func ClientSecretMiddleware() fiber.Handler {
 		log.Fatal("FATAL: Client secret is not set in environment.")
 	}
 
-	return func(c fiber.Ctx) error {
+	return func(c *fiber.Ctx) error {
 		provided := c.Get(clientKey)
 
 		if provided == "" {

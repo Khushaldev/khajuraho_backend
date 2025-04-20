@@ -8,7 +8,7 @@ import (
 	"khajuraho/backend/internal/middleware"
 	"khajuraho/backend/internal/router"
 
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v2"
 )
 
 func initApp() {
