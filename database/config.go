@@ -17,7 +17,7 @@ type DBInstance struct {
 
 var DB DBInstance
 
-func ConnectDB() error {
+func Connect() {
 	user := config.AppConfig.DBUser
 	password := config.AppConfig.DBPassword
 	name := config.AppConfig.DBName
@@ -25,7 +25,7 @@ func ConnectDB() error {
 	port := config.AppConfig.DBPort
 
 	if user == "" || password == "" || name == "" || host == "" {
-		return fmt.Errorf("database credentials are not set properly in environment variables")
+		log.Fatal("database credentials are not set properly in environment variables")
 	}
 
 	dsn := fmt.Sprintf(
@@ -38,11 +38,14 @@ func ConnectDB() error {
 	})
 
 	if err != nil {
-		return fmt.Errorf("failed to connect to database: %v", err)
+		log.Fatalf("failed to connect to database: %v", err)
 	}
 
 	log.Println("✅ Successfully connected to the database")
 
 	DB = DBInstance{Db: db}
-	return nil
+}
+
+// TODO: add disconnect func.
+func Disconnect() {
 }

@@ -1,7 +1,7 @@
 package config
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -22,10 +22,10 @@ type Config struct {
 
 var AppConfig Config
 
-func LoadConfig() error {
+func LoadConfig() {
 	err := godotenv.Load()
 	if err != nil {
-		return fmt.Errorf("no .env file found")
+		log.Fatalf("no .env file found")
 	}
 
 	AppConfig = Config{
@@ -40,8 +40,6 @@ func LoadConfig() error {
 		ClientKey:    getEnv("CLIENT_KEY", "key"),
 		ClientSecret: getEnv("CLIENT_SECRET", "secret"),
 	}
-
-	return nil
 }
 
 func getEnv(key, fallback string) string {

@@ -2,54 +2,46 @@ package main
 
 import (
 	"log"
+	"os"
 
+	"khajuraho/backend/api"
 	"khajuraho/backend/config"
 	db "khajuraho/backend/database"
 	"khajuraho/backend/middleware"
-	"khajuraho/backend/router"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/pprof"
+
+	_ "khajuraho/backend/docs"
 )
 
-func initApp() {
-	// Load configuration
-	err := config.LoadConfig()
-	if err != nil {
-		log.Fatalf("Error loading config: %v", err)
-	}
-
-	// Connect to DB
-	err = db.ConnectDB()
-	if err != nil {
-		log.Fatalf("Error connecting to database: %v", err)
-	}
+func loggerFunction() {
+	log.SetFlags(log.LstdFlags | log.LUTC | log.Lshortfile | log.Lmicroseconds)
+	log.SetOutput(os.Stdout)
 }
 
-func createApp() *fiber.App {
-	app := fiber.New(fiber.Config{
-		ErrorHandler: middleware.ErrorHandler,
-	})
+// @title Backend Service API
+// @version 1.0
+// @description API documentation for Bonus Service
+func main() {
+	loggerFunction()
+	config.LoadConfig()
 
+	configuration := fiber.Config{
+		ErrorHandler:            middleware.ErrorHandler,
+		EnableTrustedProxyCheck: true,
+	}
+
+	app := fiber.New(configuration)
+	app.Use(cors.New())
+	app.Use(pprof.New())
 	app.Use(middleware.ClientSecretMiddleware())
 
-	router.CreateRoutes(app)
+	db.Connect()
+	api.SetupRoutes(app)
 
-	return app
-}
+	log.Fatal(app.Listen(":5001"))
 
-func main() {
-	initApp()
-
-	app := createApp()
-
-	port := config.AppConfig.AppPort
-	if port == "" {
-		port = "3000"
-	}
-
-	log.Printf("🚀 Server running on http://localhost:%s", port)
-
-	if err := app.Listen(":" + port); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
-	}
+	defer db.Disconnect()
 }

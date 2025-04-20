@@ -1,7 +1,31 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "API documentation for Bonus Service",
+        "title": "Backend Service API",
+        "contact": {},
+        "version": "1.0"
     },
-    "paths": {}
+    "paths": {
+        "/api/v1/auth/send-otp": {
+            "get": {
+                "description": "This endpoint sends OTP.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OTP"
+                ],
+                "summary": "Send OTP",
+                "responses": {
+                    "204": {
+                        "description": "OTP successfully sent"
+                    }
+                }
+            }
+        }
+    }
 }
