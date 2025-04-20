@@ -24,4 +24,11 @@ go.work.sum
 # env file
 .env
 
+# macOS system file
+**/.DS_Store
 .DS_Store
+
+# Air live reload config
+.air.toml
+
+tmp

@@ -16,6 +16,7 @@ type Config struct {
 	DBPort       string
 	Env          string
 	JWTSecret    string
+	ClientKey    string
 	ClientSecret string
 }
 
@@ -36,6 +37,7 @@ func LoadConfig() error {
 		DBPort:       getEnv("DB_PORT", "5432"),
 		Env:          getEnv("GO_ENV", "development"),
 		JWTSecret:    getEnv("JWT_SECRET", "secret"),
+		ClientKey:    getEnv("CLIENT_KEY", "key"),
 		ClientSecret: getEnv("CLIENT_SECRET", "secret"),
 	}
 
