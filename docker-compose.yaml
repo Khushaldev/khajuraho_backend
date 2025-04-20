@@ -1,22 +1,13 @@
 services:
-  web:
+  server:
     build: .
     env_file:
       - .env
     ports:
       - 3000:3000 # App port
-      # - 2345:2345 # Delve debugger port
     volumes:
       - .:/usr/src/app
     command: air cmd/server/main.go -b 0.0.0.0
-    # command: >
-    #   sh -c "
-    #     dlv exec ./server --headless --listen=0.0.0.0:2345 --api-version=2 --accept-multiclient --log &
-    #     air cmd/server/main.go -b 0.0.0.0
-    #   "
-    # depends_on: # Extra
-    #   - db
-    # command: dlv exec ./app --headless --listen=:2345 --api-version=2 --accept-multiclient --log
 
   db:
     image: postgres:alpine
