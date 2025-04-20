@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"khajuraho/backend/pkg/utils"
+	"khajuraho/backend/utils"
 
 	"github.com/gofiber/fiber/v2"
 )

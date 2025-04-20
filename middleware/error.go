@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"khajuraho/backend/internal/config"
+	"khajuraho/backend/config"
 	"runtime/debug"
 
 	"github.com/gofiber/fiber/v2"

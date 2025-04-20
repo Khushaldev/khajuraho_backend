@@ -1,7 +1,7 @@
 package router
 
 import (
-	handler "khajuraho/backend/internal/handler/auth"
+	handler "khajuraho/backend/handler/auth"
 
 	"github.com/gofiber/fiber/v2"
 )

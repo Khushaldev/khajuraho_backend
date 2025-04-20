@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 
-	"khajuraho/backend/internal/config"
-	db "khajuraho/backend/internal/database"
-	"khajuraho/backend/internal/middleware"
-	"khajuraho/backend/internal/router"
+	"khajuraho/backend/config"
+	db "khajuraho/backend/database"
+	"khajuraho/backend/middleware"
+	"khajuraho/backend/router"
 
 	"github.com/gofiber/fiber/v2"
 )

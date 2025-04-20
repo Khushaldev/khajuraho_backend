@@ -5,8 +5,8 @@ import (
 	"log"
 	"strings"
 
-	"khajuraho/backend/internal/config"
-	"khajuraho/backend/pkg/utils"
+	"khajuraho/backend/config"
+	"khajuraho/backend/utils"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"

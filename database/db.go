@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"khajuraho/backend/internal/config"
+	"khajuraho/backend/config"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
