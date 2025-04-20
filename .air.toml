@@ -6,18 +6,14 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-# Array of commands to run before each build
-pre_cmd = ["echo 'hello air' > pre_cmd.txt"]
 # Just plain old shell command. You could use `make` as well.
 cmd = "go build -o ./tmp/main ./cmd/server/"
-# Array of commands to run after ^C
-post_cmd = ["echo 'hello air' > post_cmd.txt"]
 # Binary file yields from `cmd`.
 bin = "tmp/main"
 # Customize binary, can setup environment variables when run your app.
 full_bin = "APP_ENV=dev APP_USER=air ./tmp/main"
 # Add additional arguments when running binary (bin/full_bin). Will run './tmp/main hello world'.
-args_bin = ["hello", "world"]
+args_bin = []
 # Watch these filename extensions.
 include_ext = ["go", "tpl", "tmpl", "html"]
 # Ignore these filename extensions or directories.
@@ -80,4 +76,4 @@ keep_scroll = true
 # Enable live-reloading on the browser.
 enabled = true
 proxy_port = 8090
-app_port = 8080
+app_port = 3000
