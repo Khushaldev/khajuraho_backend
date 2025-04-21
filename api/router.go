@@ -1,6 +1,7 @@
 package api
 
 import (
+	"khajuraho/backend/middleware/auth"
 	"khajuraho/backend/models"
 	"khajuraho/backend/utils"
 	"time"
@@ -12,18 +13,20 @@ import (
 )
 
 func SetupRoutes(app *fiber.App) {
-	// API group with logging middleware
-	api := app.Group("/api", logger.New())
+	// API group with logging and client secret middleware
+	api := app.Group("/api", logger.New(), auth.RequireClientSecret())
 
 	app.Get("/docs/*", swagger.HandlerDefault)
 
 	apiv1 := api.Group("/v1")
 
-	app.Use(logger.New(logger.Config{
-		Format:     "${cyan}[${time}] ${green}${pid} ${red}${status} ${blue}[${method}] ${white}${path}\n",
-		TimeFormat: "02-Jan-2006",
-		TimeZone:   "Asia/Kolkata",
-	}))
+	app.Use(logger.New(
+		logger.Config{
+			Format:     "${cyan}[${time}] ${green}${pid} ${red}${status} ${blue}[${method}] ${white}${path}\n",
+			TimeFormat: "02-Jan-2006",
+			TimeZone:   "Asia/Kolkata",
+		},
+	))
 
 	// Auth route
 	auth := apiv1.Group("/auth")

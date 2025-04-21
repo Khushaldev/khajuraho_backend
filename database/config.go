@@ -12,10 +12,6 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-// type DBInstance struct {
-// 	Db *gorm.DB
-// }
-
 var Instance *gorm.DB
 
 func Connect() {
@@ -51,13 +47,13 @@ func Connect() {
 
 // TODO: add disconnect func.
 func Disconnect() {
-	sqlDB, err := Instance.DB()
+	db, err := Instance.DB()
 	if err != nil {
 		log.Printf("❌ Failed to get raw database connection: %v", err)
 		return
 	}
 
-	if err := sqlDB.Close(); err != nil {
+	if err := db.Close(); err != nil {
 		log.Printf("❌ Error while closing database: %v", err)
 		return
 	}

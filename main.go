@@ -7,7 +7,6 @@ import (
 	"khajuraho/backend/api"
 	"khajuraho/backend/config"
 	db "khajuraho/backend/database"
-	"khajuraho/backend/middleware/auth"
 	err "khajuraho/backend/middleware/error"
 
 	"github.com/gofiber/fiber/v2"
@@ -37,7 +36,6 @@ func main() {
 	app := fiber.New(configuration)
 	app.Use(cors.New())
 	app.Use(pprof.New())
-	app.Use(auth.RequireClientSecret())
 
 	db.Connect()
 	api.SetupRoutes(app)
