@@ -1,4 +1,4 @@
-package middleware
+package auth
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ func isValidJWT(tokenStr string) bool {
 	return err == nil && token.Valid
 }
 
-func JWTMiddleware() fiber.Handler {
+func RequireJWT() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		authHeader := c.Get("Authorization")
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
@@ -39,10 +39,10 @@ func JWTMiddleware() fiber.Handler {
 	}
 }
 
-// ClientSecretMiddleware is a middleware that validates the Client-Secret header in the request.
+// ClientSecret is a middleware that validates the Client-Secret header in the request.
 // The Client-Secret header is required and must match the value set in the environment variable.
 // If the header is missing or the values do not match, it returns 401 Unauthorized.
-func ClientSecretMiddleware() fiber.Handler {
+func RequireClientSecret() fiber.Handler {
 	clientKey := config.AppConfig.ClientKey
 	clientSecret := config.AppConfig.ClientSecret
 

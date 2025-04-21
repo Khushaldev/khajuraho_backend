@@ -5,17 +5,18 @@ import (
 	"log"
 
 	"khajuraho/backend/config"
+	"khajuraho/backend/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
 
-type DBInstance struct {
-	Db *gorm.DB
-}
+// type DBInstance struct {
+// 	Db *gorm.DB
+// }
 
-var DB DBInstance
+var Instance *gorm.DB
 
 func Connect() {
 	user := config.AppConfig.DBUser
@@ -43,9 +44,34 @@ func Connect() {
 
 	log.Println("✅ Successfully connected to the database")
 
-	DB = DBInstance{Db: db}
+	Instance = db
+
+	migrate()
 }
 
 // TODO: add disconnect func.
 func Disconnect() {
+	sqlDB, err := Instance.DB()
+	if err != nil {
+		log.Printf("❌ Failed to get raw database connection: %v", err)
+		return
+	}
+
+	if err := sqlDB.Close(); err != nil {
+		log.Printf("❌ Error while closing database: %v", err)
+		return
+	}
+
+	log.Println("🔌 Database connection closed gracefully")
+}
+
+func migrate() {
+	err := Instance.AutoMigrate(
+		&models.User{},
+	)
+	if err != nil {
+		log.Fatalf("❌ AutoMigrate failed: %v", err)
+	}
+
+	log.Println("📦 Database tables migrated (created if not exists)")
 }

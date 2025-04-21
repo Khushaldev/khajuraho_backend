@@ -29,7 +29,7 @@ func LoadConfig() {
 	}
 
 	AppConfig = Config{
-		AppPort:      getEnv("APP_PORT", "3000"),
+		AppPort:      getEnv("APP_PORT", "5001"),
 		DBHost:       getEnv("DB_HOST", "localhost"),
 		DBUser:       getEnv("DB_USER", "postgres"),
 		DBPassword:   getEnv("DB_PASSWORD", "password"),

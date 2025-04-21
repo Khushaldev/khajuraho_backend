@@ -7,7 +7,8 @@ import (
 	"khajuraho/backend/api"
 	"khajuraho/backend/config"
 	db "khajuraho/backend/database"
-	"khajuraho/backend/middleware"
+	"khajuraho/backend/middleware/auth"
+	err "khajuraho/backend/middleware/error"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -23,20 +24,20 @@ func loggerFunction() {
 
 // @title Backend Service API
 // @version 1.0
-// @description API documentation for Bonus Service
+// @description API documentation for Khajuraho API Service
 func main() {
 	loggerFunction()
 	config.LoadConfig()
 
 	configuration := fiber.Config{
-		ErrorHandler:            middleware.ErrorHandler,
+		ErrorHandler:            err.Handler,
 		EnableTrustedProxyCheck: true,
 	}
 
 	app := fiber.New(configuration)
 	app.Use(cors.New())
 	app.Use(pprof.New())
-	app.Use(middleware.ClientSecretMiddleware())
+	app.Use(auth.RequireClientSecret())
 
 	db.Connect()
 	api.SetupRoutes(app)
