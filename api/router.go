@@ -30,8 +30,7 @@ func SetupRoutes(app *fiber.App) {
 
 	// Auth route
 	auth := apiv1.Group("/auth")
-
-	auth.Get("/send-otp", sendOTP)
+	auth.Get("/google", googleLogin)
 
 	// TODO: health check add
 }
@@ -44,13 +43,13 @@ func SetupRoutes(app *fiber.App) {
 // @Produce json
 // @Success 204 "OTP successfully sent"
 // @Router /api/v1/auth/send-otp [get]
-func sendOTP(c *fiber.Ctx) error {
+func googleLogin(c *fiber.Ctx) error {
 	user := models.User{
-		ID:        uuid.New(),
-		Name:      "Khushal",
-		Email:     "jW2yS@example.com",
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		ID:          uuid.New(),
+		DisplayName: "Khushal",
+		Email:       "jW2yS@example.com",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 	return utils.Success(c, user, utils.SuccessMessage)
 }
