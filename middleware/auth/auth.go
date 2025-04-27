@@ -32,7 +32,7 @@ func RequireJWT() fiber.Handler {
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 
 		if tokenStr == "" || !isValidJWT(tokenStr) {
-			return utils.Unauthorized(c, "Access denied")
+			return utils.Unauthorized(c, "Access denied", []string{"Invalid token"}, nil)
 		}
 
 		return c.Next()
@@ -47,18 +47,18 @@ func RequireClientSecret() fiber.Handler {
 	clientSecret := config.AppConfig.ClientSecret
 
 	if clientSecret == "" || clientKey == "" {
-		log.Fatal("FATAL: Client secret is not set in environment.")
+		log.Fatal("FATAL: Client secret and/or client key are not set in environment. Please check your configuration.")
 	}
 
 	return func(c *fiber.Ctx) error {
 		provided := c.Get(clientKey)
 
 		if provided == "" {
-			return utils.Unauthorized(c, "Missing Client-Secret header")
+			return utils.Unauthorized(c, "Missing Client-Secret header", []string{"The required Client-Secret header is missing from the request."}, nil)
 		}
 
 		if provided != clientSecret {
-			return utils.Unauthorized(c, "Invalid Client-Secret")
+			return utils.Unauthorized(c, "Invalid Client-Secret", []string{"The provided Client-Secret does not match our records."}, nil)
 		}
 
 		return c.Next()

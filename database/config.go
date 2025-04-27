@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"khajuraho/backend/config"
-	"khajuraho/backend/models"
+	models "khajuraho/backend/model"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -64,6 +64,8 @@ func Disconnect() {
 func migrate() {
 	err := Instance.AutoMigrate(
 		&models.User{},
+		&models.AuthSession{},
+		&models.RefreshSession{},
 	)
 	if err != nil {
 		log.Fatalf("❌ AutoMigrate failed: %v", err)

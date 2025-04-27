@@ -1,9 +1,9 @@
 package dto
 
 import (
+	"khajuraho/backend/model"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
@@ -16,30 +16,26 @@ type RefreshToken struct {
 	UpdatedAt time.Time
 }
 
-// JWT Claims
-type Claims struct {
-	UserID string `json:"user_id"`
-	jwt.RegisteredClaims
-}
-
 // Request/Response Structs
 type GoogleLoginRequest struct {
-	IDToken string `json:"id_token"`
+	IDToken   string  `json:"id_token"`
+	Device    string  `json:"device"`
+	IP        string  `json:"ip"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+	UserAgent string  `json:"user_agent"`
 }
 
-type RefreshTokenRequest struct {
+type AuthTokenResponse struct {
+	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 }
 
-type UserResponse struct {
-	ID          string `json:"id"`
-	Email       string `json:"email"`
-	DisplayName string `json:"display_name"`
-	PhotoURL    string `json:"photo_url"`
+type GoogleLoginResponse struct {
+	User   model.User        `json:"user"`
+	Tokens AuthTokenResponse `json:"tokens"`
 }
 
-type AuthResponse struct {
-	User         UserResponse `json:"user"`
-	AccessToken  string       `json:"access_token"`
-	RefreshToken string       `json:"refresh_token"`
+type LogoutRequest struct {
+	RefreshToken string `json:"refresh_token"`
 }

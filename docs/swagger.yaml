@@ -1,20 +1,58 @@
+basePath: /api/v1
+definitions:
+  dto.SendError:
+    properties:
+      errors:
+        example:
+        - Unexpected issue
+        items:
+          type: string
+        type: array
+      message:
+        example: Failed
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  dto.SendSuccess:
+    properties:
+      data: {}
+      message:
+        example: Successfull
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+host: localhost:5001
 info:
   contact: {}
-  description: API documentation for Bonus Service
+  description: API documentation for Khajuraho API Service
   title: Backend Service API
   version: "1.0"
 paths:
-  /api/v1/auth/send-otp:
+  /health:
     get:
       consumes:
       - application/json
-      description: This endpoint sends OTP.
+      description: This endpoint checks api health.
       produces:
       - application/json
       responses:
-        "204":
-          description: OTP successfully sent
-      summary: Send OTP
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.SendSuccess'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.SendError'
+        "429":
+          description: Too Many Requests
+          schema:
+            $ref: '#/definitions/dto.SendError'
+      summary: Health Check
       tags:
-      - OTP
+      - Health
 swagger: "2.0"

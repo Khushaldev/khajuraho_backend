@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"khajuraho/backend/config"
 	"khajuraho/backend/utils"
-	"runtime/debug"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -15,13 +14,12 @@ import (
 // response with a generic error message.
 func Handler(c *fiber.Ctx, err error) error {
 	env := config.AppConfig.Env
+	errorMessage := utils.ServerSideErrorMessage
 
 	if env == "development" {
-		// Print stack trace
-		fmt.Printf("%s", debug.Stack())
-
-		return utils.ServerError(c, utils.ErrorMessage, []string{err.Error()})
+		errorMessage = err.Error()
+		fmt.Printf("Error %s", errorMessage)
 	}
 
-	return utils.ServerError(c, utils.ErrorMessage, []string{utils.ServerSideErrorMessage})
+	return utils.ServerError(c, utils.ErrorMessage, []string{errorMessage}, nil)
 }
