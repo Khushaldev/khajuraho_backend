@@ -7,6 +7,7 @@ import (
 	"khajuraho/backend/model"
 	"time"
 
+	"firebase.google.com/go/v4/auth"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -35,7 +36,12 @@ func CreateUser(newUser model.User) (*model.User, error) {
 	return &newUser, nil
 }
 
-func FetchOrRegisterUser(uid string, req dto.GoogleLoginRequest) (*model.User, error) {
+func FetchOrRegisterUser(
+	uid string,
+	userRecord *auth.UserRecord,
+	req dto.GoogleLoginRequest,
+) (*model.User, error) {
+	// uid := firebaseToken.UID
 	session, err := FindAuthSessionById(uid)
 	if err != nil {
 		return nil, err
@@ -46,12 +52,13 @@ func FetchOrRegisterUser(uid string, req dto.GoogleLoginRequest) (*model.User, e
 	}
 
 	newUser := model.User{
-		DisplayName: "Khushal Yadav",            // TODO: Get from firebase
-		Email:       "khushalyadav90@gmail.com", // TODO: Get from firebase
-		IsActive:    true,
-		IsVerified:  true,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
+		DisplayName:    userRecord.DisplayName,
+		Email:          userRecord.Email,
+		ProfilePicture: userRecord.PhotoURL,
+		IsActive:       true,
+		IsVerified:     true,
+		CreatedAt:      time.Now(),
+		UpdatedAt:      time.Now(),
 	}
 	user, err := CreateUser(newUser)
 	if err != nil {
@@ -66,10 +73,10 @@ func FetchOrRegisterUser(uid string, req dto.GoogleLoginRequest) (*model.User, e
 		LoginType:      "google",
 		Latitude:       req.Latitude,
 		Longitude:      req.Longitude,
-		IP:             req.IP,
-		UserAgent:      req.UserAgent,
-		CreatedAt:      time.Now(),
-		UpdatedAt:      time.Now(),
+		// IP:             req.IP,        // TODO: get IP from Header
+		// UserAgent:      req.UserAgent, // TODO: get UserAgent from Header
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
 	_, err = CreateAuthSession(*authSession)

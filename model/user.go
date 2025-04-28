@@ -7,11 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-const (
-	accessTokenTTL  = 15 * time.Minute    // 15 minutes
-	refreshTokenTTL = 30 * 24 * time.Hour // 30 days
-)
-
 type User struct {
 	ID             uuid.UUID `gorm:"type:uuid;primaryKey" json:"id"`
 	DisplayName    string    `gorm:"not null" json:"display_name"`

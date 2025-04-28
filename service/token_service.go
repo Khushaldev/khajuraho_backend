@@ -46,18 +46,19 @@ func GenerateAuthTokens(userID string) (*model.AuthTokens, error) {
 	}, nil
 }
 
-func CreateRefreshSession(userID uuid.UUID, req dto.GoogleLoginRequest, refresh model.JWTToken) error {
+func CreateRefreshSession(userID uuid.UUID, req dto.GoogleLoginRequest, tokens *model.AuthTokens) error {
 	session := model.RefreshSession{
-		ID:        uuid.New(),
-		UserID:    userID,
-		Token:     refresh.Token,
-		ExpiresAt: refresh.ExpiresAt,
-		Device:    req.Device,
-		IP:        req.IP,
-		UserAgent: req.UserAgent,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		Revoked:   false,
+		ID:           uuid.New(),
+		UserID:       userID,
+		AccessToken:  tokens.AccessToken.Token,
+		RefreshToken: tokens.RefreshToken.Token,
+		ExpiresAt:    tokens.RefreshToken.ExpiresAt,
+		Device:       "",
+		IP:           "",
+		UserAgent:    "",
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+		Revoked:      false,
 	}
 	return repository.SaveRefreshToken(&session)
 }
@@ -73,11 +74,7 @@ func RefreshTokenService(refreshToken string) (*model.AuthTokens, error) {
 		return nil, err
 	}
 
-	err = CreateRefreshSession(session.UserID, dto.GoogleLoginRequest{
-		Device:    session.Device,
-		IP:        session.IP,
-		UserAgent: session.UserAgent,
-	}, tokens.RefreshToken)
+	err = CreateRefreshSession(session.UserID, dto.GoogleLoginRequest{}, tokens)
 	if err != nil {
 		return nil, err
 	}

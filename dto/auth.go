@@ -18,12 +18,12 @@ type RefreshToken struct {
 
 // Request/Response Structs
 type GoogleLoginRequest struct {
-	IDToken   string  `json:"id_token"`
-	Device    string  `json:"device"`
-	IP        string  `json:"ip"`
+	IDToken string `json:"id_token"`
+	// UserAgent string  `json:"user_agent"`
+	// Device    string  `json:"device"`
+	// IP        string  `json:"ip"`
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
-	UserAgent string  `json:"user_agent"`
 }
 
 type AuthTokenResponse struct {

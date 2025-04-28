@@ -7,12 +7,18 @@ import (
 )
 
 func LoginWithGoogle(req dto.GoogleLoginRequest) (*model.User, *model.AuthTokens, error) {
-	firebaseToken, err := VerifyFirebaseIDToken(req.IDToken)
+	firebaseToken, err := VerifyFirebaseUserIDToken(req.IDToken)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	user, err := repository.FetchOrRegisterUser(firebaseToken.UID, req)
+	uid := firebaseToken.UID
+	userRecord, err := GetFirebaseUserDetailsByUID(uid)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	user, err := repository.FetchOrRegisterUser(uid, userRecord, req)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -22,7 +28,7 @@ func LoginWithGoogle(req dto.GoogleLoginRequest) (*model.User, *model.AuthTokens
 		return nil, nil, err
 	}
 
-	err = CreateRefreshSession(user.ID, req, tokens.RefreshToken)
+	err = CreateRefreshSession(user.ID, req, tokens)
 	if err != nil {
 		return nil, nil, err
 	}
