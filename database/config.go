@@ -2,10 +2,9 @@ package db
 
 import (
 	"fmt"
-	"log"
-
 	"khajuraho/backend/config"
-	models "khajuraho/backend/model"
+	"khajuraho/backend/model"
+	"log"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -63,9 +62,11 @@ func Disconnect() {
 
 func migrate() {
 	err := Instance.AutoMigrate(
-		&models.User{},
-		&models.AuthSession{},
-		&models.RefreshSession{},
+		&model.User{},
+		&model.AuthSession{},
+		&model.RefreshSession{},
+		&model.Category{},
+		&model.SubCategory{},
 	)
 	if err != nil {
 		log.Fatalf("❌ AutoMigrate failed: %v", err)

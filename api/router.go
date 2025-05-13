@@ -30,6 +30,9 @@ func SetupRoutes(app *fiber.App) {
 	auth.Post("/google", googleAuthHandler)
 	auth.Post("/logout", logoutHandler)
 
+	category := apiv1.Group("/category")
+	category.Get("/hierarchy", getCategoryHierarchyHandler)
+
 	// Basic Health check with rate limiter
 	app.Get("/health", healthCheckHandler, limiter.New())
 }

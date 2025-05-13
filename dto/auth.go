@@ -16,10 +16,9 @@ type RefreshToken struct {
 	UpdatedAt time.Time
 }
 
-// Request/Response Structs
 type GoogleLoginRequest struct {
 	IDToken string `json:"id_token"`
-	// UserAgent string  `json:"user_agent"`
+	// UserAgent string  `json:"user_agent"` // TODO: get these values from header
 	// Device    string  `json:"device"`
 	// IP        string  `json:"ip"`
 	Latitude  float64 `json:"latitude"`

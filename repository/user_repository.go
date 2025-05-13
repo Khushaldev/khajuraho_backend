@@ -41,7 +41,6 @@ func FetchOrRegisterUser(
 	userRecord *auth.UserRecord,
 	req dto.GoogleLoginRequest,
 ) (*model.User, error) {
-	// uid := firebaseToken.UID
 	session, err := FindAuthSessionById(uid)
 	if err != nil {
 		return nil, err
