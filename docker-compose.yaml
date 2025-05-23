@@ -10,7 +10,9 @@ services:
     command: air main.go -b 0.0.0.0
 
   db:
-    image: postgres:alpine
+    image: postgis/postgis:17-3.5
+    platform: linux/amd64
+    # image: postgres:alpine
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_USER=${DB_USER}

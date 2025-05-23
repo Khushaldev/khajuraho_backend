@@ -8,6 +8,8 @@ import (
 	"khajuraho/backend/config"
 	db "khajuraho/backend/database"
 	err "khajuraho/backend/middleware/error"
+	"khajuraho/backend/service/cache"
+	"khajuraho/backend/utils"
 
 	_ "khajuraho/backend/docs"
 
@@ -15,11 +17,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 )
-
-func loggerFunction() {
-	log.SetFlags(log.LstdFlags | log.LUTC | log.Lshortfile | log.Lmicroseconds)
-	log.SetOutput(os.Stdout)
-}
 
 // @title Backend Service API
 // @version 1.0
@@ -31,6 +28,8 @@ func main() {
 	loggerFunction()
 	config.LoadConfig()
 	config.InitFirebase()
+	utils.InitValidator()
+	cache.InitCache()
 
 	configuration := fiber.Config{
 		ErrorHandler:            err.Handler,
@@ -47,4 +46,9 @@ func main() {
 	log.Fatal(app.Listen(":5001"))
 
 	defer db.Disconnect()
+}
+
+func loggerFunction() {
+	log.SetFlags(log.LstdFlags | log.LUTC | log.Lshortfile | log.Lmicroseconds)
+	log.SetOutput(os.Stdout)
 }

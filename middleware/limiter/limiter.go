@@ -17,5 +17,5 @@ func New() fiber.Handler {
 }
 
 func limitReachedHandler(c *fiber.Ctx) error {
-	return utils.TooManyRequests(c, utils.TooManyRequestsMessage, []string{utils.RateLimitErrorMessage}, nil)
+	return utils.TooManyRequests(c, utils.TooManyRequestsMessage, utils.ErrorCode{Code: utils.TooManyRequestsCode})
 }

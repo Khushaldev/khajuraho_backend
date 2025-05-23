@@ -16,7 +16,7 @@ import (
 func isValidJWT(tokenStr string) bool {
 	var secretKey = []byte(config.AppConfig.JWTSecret)
 
-	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
@@ -32,7 +32,7 @@ func RequireJWT() fiber.Handler {
 		tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 
 		if tokenStr == "" || !isValidJWT(tokenStr) {
-			return utils.Unauthorized(c, "Access denied", []string{"Invalid token"}, nil)
+			return utils.Unauthorized(c, "Access denied", nil)
 		}
 
 		return c.Next()
@@ -54,11 +54,19 @@ func RequireClientSecret() fiber.Handler {
 		provided := c.Get(clientKey)
 
 		if provided == "" {
-			return utils.Unauthorized(c, "Missing Client-Secret header", []string{"The required Client-Secret header is missing from the request."}, nil)
+			return utils.Unauthorized(
+				c,
+				"Missing Client-Secret header",
+				utils.ErrorCode{Code: utils.AccessDeniedCode},
+			)
 		}
 
 		if provided != clientSecret {
-			return utils.Unauthorized(c, "Invalid Client-Secret", []string{"The provided Client-Secret does not match our records."}, nil)
+			return utils.Unauthorized(
+				c,
+				"Invalid Client-Secret",
+				utils.ErrorCode{Code: utils.AccessDeniedCode},
+			)
 		}
 
 		return c.Next()

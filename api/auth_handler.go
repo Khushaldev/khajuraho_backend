@@ -12,12 +12,17 @@ func googleAuthHandler(c *fiber.Ctx) error {
 	var req dto.GoogleLoginRequest
 
 	if err := c.BodyParser(&req); err != nil {
-		return utils.BadRequest(c, "Invalid request format", []string{"Invalid request"}, err)
+		return utils.BadRequest(c, utils.BadRequestMessage, err) // TODO: need to change the error type
+	}
+
+	errors := utils.AppValidator(&req, c)
+	if errors != nil {
+		return utils.Unprocessable(c, "Data validation failed", *errors)
 	}
 
 	user, tokens, err := service.LoginWithGoogle(req)
 	if err != nil {
-		return utils.ServerError(c, "Login failed", []string{"Something went wrong"}, err)
+		return utils.ServerError(c, "Login failed", err)
 
 	}
 
@@ -29,7 +34,7 @@ func googleAuthHandler(c *fiber.Ctx) error {
 		},
 	}
 
-	return utils.OK(c, response, "Login successful")
+	return utils.OK(c, "Login successful", response)
 }
 
 func logoutHandler(c *fiber.Ctx) error {
@@ -37,12 +42,17 @@ func logoutHandler(c *fiber.Ctx) error {
 	var req dto.LogoutRequest
 
 	if err := c.BodyParser(&req); err != nil {
-		return utils.BadRequest(c, "Invalid request format", []string{"Invalid request"}, err)
+		return utils.BadRequest(c, utils.BadRequestMessage, err) // TODO: need to change the error type
+	}
+
+	errors := utils.AppValidator(&req, c)
+	if errors != nil {
+		return utils.Unprocessable(c, "Data validation failed", *errors)
 	}
 
 	if err := service.LogoutService(req.RefreshToken); err != nil {
-		return utils.ServerError(c, "Logout failed", []string{"Something went wrong"}, err)
+		return utils.ServerError(c, "Logout failed", err)
 	}
 
-	return utils.OK(c, nil, "Logout successful")
+	return utils.OK(c, "Logout successful", nil)
 }

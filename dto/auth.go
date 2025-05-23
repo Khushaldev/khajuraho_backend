@@ -7,6 +7,19 @@ import (
 	"github.com/google/uuid"
 )
 
+type GoogleLoginRequest struct {
+	IDToken string `json:"id_token" validate:"required,gt=0"`
+	// UserAgent string  `json:"user_agent"` // TODO: get these values from header
+	// Device    string  `json:"device"`
+	// IP        string  `json:"ip"`
+	Latitude  float64 `json:"latitude"`
+	Longitude float64 `json:"longitude"`
+}
+
+type LogoutRequest struct {
+	RefreshToken string `json:"refresh_token" validate:"required,gt=0"`
+}
+
 type RefreshToken struct {
 	ID        uuid.UUID `gorm:"type:uuid;primary_key;default:gen_random_uuid()"`
 	UserID    uuid.UUID `gorm:"type:uuid;index"`
@@ -14,15 +27,6 @@ type RefreshToken struct {
 	ExpiresAt time.Time
 	CreatedAt time.Time
 	UpdatedAt time.Time
-}
-
-type GoogleLoginRequest struct {
-	IDToken string `json:"id_token"`
-	// UserAgent string  `json:"user_agent"` // TODO: get these values from header
-	// Device    string  `json:"device"`
-	// IP        string  `json:"ip"`
-	Latitude  float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
 }
 
 type AuthTokenResponse struct {
@@ -33,8 +37,4 @@ type AuthTokenResponse struct {
 type GoogleLoginResponse struct {
 	User   model.User        `json:"user"`
 	Tokens AuthTokenResponse `json:"tokens"`
-}
-
-type LogoutRequest struct {
-	RefreshToken string `json:"refresh_token"`
 }

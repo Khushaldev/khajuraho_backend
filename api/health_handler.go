@@ -18,5 +18,5 @@ import (
 // @Router /health [get]
 func healthCheckHandler(c *fiber.Ctx) error {
 	//TODO: check database and other services health and return the status in response.
-	return utils.OK(c, nil, "Server is running")
+	return utils.OK(c, "Server is running", nil)
 }

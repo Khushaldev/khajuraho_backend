@@ -66,7 +66,12 @@ func migrate() {
 		&model.AuthSession{},
 		&model.RefreshSession{},
 		&model.Category{},
-		&model.SubCategory{},
+		&model.Country{},
+		&model.State{},
+		&model.District{},
+		&model.City{},
+		&model.Address{},
+		&model.DiscoverItem{},
 	)
 	if err != nil {
 		log.Fatalf("❌ AutoMigrate failed: %v", err)

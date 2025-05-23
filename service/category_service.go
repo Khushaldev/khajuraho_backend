@@ -1,57 +1,41 @@
 package service
 
 import (
-	"fmt"
 	"khajuraho/backend/dto"
 	"khajuraho/backend/model"
 	"khajuraho/backend/repository"
+	"khajuraho/backend/service/cache"
+
+	"github.com/google/uuid"
 )
 
-func GetCategories() (*[]model.Category, error) {
-	categories, err := repository.FindCategories()
-	if err != nil {
-		return nil, err
-	}
+func BuildCategoryTree(categories []model.Category, parentID *uuid.UUID) []dto.CategoryNode {
+	var childNodes []dto.CategoryNode
 
-	return categories, nil
-}
-
-func GetCategoryHierarchy() (*[]dto.CategoryHierarchy, error) {
-	categories, err := repository.FindCategories()
-	if err != nil {
-		return nil, err
-	}
-
-	if categories == nil {
-		return nil, fmt.Errorf("categories not found")
-	}
-	var hierarchy []dto.CategoryHierarchy
-
-	for _, category := range *categories {
-		subCategories, err := repository.FindSubCategoriesByCategoryId(category.ID.String())
-		if err != nil || subCategories == nil {
-			continue
-		} else {
-			var subCategoryHierarchy []dto.CategoryHierarchy
-			for _, subCategory := range *subCategories {
-				subCategoryHierarchy = append(subCategoryHierarchy, dto.CategoryHierarchy{
-					ID:       subCategory.ID.String(),
-					Name:     subCategory.Name,
-					Slug:     subCategory.Slug,
-					Icon:     subCategory.Icon,
-					Children: []dto.CategoryHierarchy{},
-				})
-			}
-			hierarchy = append(hierarchy, dto.CategoryHierarchy{
+	for _, category := range categories {
+		isDirectChild := (category.ParentID == nil && parentID == nil) || (category.ParentID != nil && parentID != nil && *category.ParentID == *parentID)
+		if isDirectChild {
+			childNode := dto.CategoryNode{
 				ID:       category.ID.String(),
 				Name:     category.Name,
 				Slug:     category.Slug,
 				Icon:     category.Icon,
-				Children: subCategoryHierarchy,
-			})
+				Children: BuildCategoryTree(categories, &category.ID),
+			}
+			childNodes = append(childNodes, childNode)
 		}
-
 	}
 
-	return &hierarchy, nil
+	return childNodes
+}
+
+func GetCategoryNode() ([]dto.CategoryNode, error) {
+	var categories []model.Category
+	err := cache.GetOrSetCache(cache.CategoriesKey, &categories, repository.FindCategories)
+	if err != nil {
+		return nil, err
+	}
+
+	tree := BuildCategoryTree(categories, nil)
+	return tree, nil
 }
