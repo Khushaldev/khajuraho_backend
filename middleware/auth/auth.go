@@ -53,18 +53,10 @@ func RequireClientSecret() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		provided := c.Get(clientKey)
 
-		if provided == "" {
+		if provided == "" || provided != clientSecret {
 			return utils.Unauthorized(
 				c,
-				"Missing Client-Secret header",
-				utils.ErrorCode{Code: utils.AccessDeniedCode},
-			)
-		}
-
-		if provided != clientSecret {
-			return utils.Unauthorized(
-				c,
-				"Invalid Client-Secret",
+				"Missing or Invalid Client-Secret",
 				utils.ErrorCode{Code: utils.AccessDeniedCode},
 			)
 		}

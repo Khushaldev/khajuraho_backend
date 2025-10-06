@@ -34,10 +34,5 @@ func getCategoryNodeHandler(c *fiber.Ctx) error {
 	// 	Country: address.Area.City.State.Country.Name,
 	// }
 
-	// data := map[string]any{
-	// 	"categories": categories,
-	// 	"address":    response,
-	// }
-
 	return utils.OK(c, "Categories fetched successfully", categories)
 }

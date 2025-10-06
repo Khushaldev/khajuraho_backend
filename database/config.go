@@ -72,6 +72,14 @@ func migrate() {
 		&model.City{},
 		&model.Address{},
 		&model.DiscoverItem{},
+		&model.Attribute{},
+		&model.AttributeType{},
+		&model.AttributeGroup{},
+		&model.AttributeGroupAttribute{},
+		&model.DiscoverItemTag{},
+		&model.DiscoverItemAttributeValue{},
+		&model.Tag{},
+		&model.DiscoverItemImage{},
 	)
 	if err != nil {
 		log.Fatalf("❌ AutoMigrate failed: %v", err)
